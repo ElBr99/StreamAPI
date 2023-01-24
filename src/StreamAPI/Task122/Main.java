@@ -25,14 +25,14 @@ public class Main {
 
         // 3.Получить отсортированный по фамилии список потенциально работоспособных людей
         // с высшим образованием в выборке (т.е. людей с высшим образованием от 18 до 60 лет для женщин и до 65 лет для мужчин).
-        List<Person> newList = getWorkablePersonsList(persons, 18, 65, 60, MAN, WOMAN, HIGHER);
+        List<Person> newList = getWorkablePersonsList(persons);
+        System.out.println(newList.toString());
     }
 
-    private static List<Person> getWorkablePersonsList(Collection<Person> persons, int ageMin, int ageMaxMan, int ageMaxWoman, Enum maleSex, Enum femaleSex, Enum education) {
+    private static List<Person> getWorkablePersonsList(Collection<Person> persons) {
         return persons
                 .stream()
-                .filter(x -> x.getAge() >= ageMin && x.getAge() <= ageMaxWoman && x.getSex() == femaleSex && x.getEducation() == education)
-                .filter(x -> x.getAge() >= ageMin && x.getAge() <= ageMaxMan && x.getSex() == maleSex && x.getEducation() == education)
+                .filter(person -> checkExpression(person))
                 .sorted(Comparator.comparing(Person::getSurname))
                 .collect(Collectors.toList());
     }
@@ -65,4 +65,20 @@ public class Main {
                 .filter(x -> x.getAge() < age)
                 .count();
     }
+
+    public static boolean checkExpression(Person person) {
+        if (HIGHER.equals(person.getEducation())) {
+            if (person.getSex() == WOMAN) {
+                return checkAges(person.getAge(), 18, 60);
+            } else {
+                return checkAges(person.getAge(), 18, 65);
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkAges(int actualAge, int ageMin, int ageMax) {
+        return ageMin <= actualAge && actualAge <= ageMax;
+    }
+
 }

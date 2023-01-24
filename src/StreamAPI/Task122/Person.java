@@ -18,16 +18,28 @@ public class Person {
     public String getName() {
         return name;
     }
+
     public String getSurname() {
         return surname;
     }
+
     public Education getEducation() {
         return education;
     }
+
     public Sex getSex() {
         return sex;
     }
+
     public Integer getAge() {
         return age;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "surname='" + surname + '\'' +
+                ", age=" + age +
+                '}';
     }
 }
